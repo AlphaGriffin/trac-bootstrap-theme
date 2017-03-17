@@ -1,6 +1,15 @@
 body {
     padding-top: 60px;
     padding-bottom: 40px;
+    background-color: black;
+}
+
+html, body {
+    color: #BBB;
+}
+
+#aglogo {
+    margin-bottom: 1em;
 }
 
 textarea {
@@ -18,8 +27,14 @@ textarea {
     white-space: normal;
 }
 
+.navbar-inner {
+    background-color: orange;
+    background-image: linear-gradient(to bottom, orange, darkorange);
+    border: none;
+}
+
 .navbar .nav > li > a {
-    color: #FFFFFF;
+    text-shadow: 0 1px 0 orange;
 }
 
 .navbar .nav .active > a, .navbar .nav .active > a:hover {
@@ -67,3 +82,37 @@ form input {
 ul.breadcrumb {
   float: left;
 }
+
+.wikipage h2 {
+    background-color: #444;
+    box-shadow: .1em .4em .7em 0 #444;
+}
+
+.well {
+    padding-left: .2em;
+    background-color: #222;
+    border-color: #777;
+}
+
+.trac-content, .ticket {
+    background-color: #272222;
+    padding: .3em;
+}
+
+.pull-right {
+    z-index: 100;
+}
+
+.report div.reports h3 :link, .report div.reports h3 :visited {
+    color: #CCF;
+}
+
+legend {
+    color: white;
+    background-color: #555;
+}
+
+.nav-list > li > a, .nav-list .nav-header {
+    text-shadow: none;
+}
+

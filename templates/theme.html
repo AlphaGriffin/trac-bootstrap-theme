@@ -7,10 +7,12 @@ SIDEBAR_SPAN = 2
 CONTENT_SPAN = 12 - SIDEBAR_SPAN
 
 first_metanav = chrome['nav']['metanav'][0]['label']
-if hasattr(first_metanav, 'children'):
-  user_menu_text = first_metanav.children
-else:
-  user_menu_text = first_metanav
+#if hasattr(first_metanav, 'children'):
+#  user_menu_text = first_metanav.children
+#else:
+#  user_menu_text = first_metanav
+user_menu_text = first_metanav
+
 
 new_ctxtnav = []
 for element in chrome['ctxtnav']:
@@ -23,13 +25,13 @@ chrome['ctxtnav'] = new_ctxtnav
 
 with perm.env.db_transaction as db:
     cursor = db.cursor()
-    cursor.execute(
-      "SELECT id, title FROM report ORDER BY %s" % ('id'))
-    all_reports = list(cursor)
+    #cursor.execute(
+    #  "SELECT id, title FROM report ORDER BY %s" % ('id'))
+    #all_reports = list(cursor)
 
     sql = (
       'SELECT name, max(time) AS max_time FROM wiki '
-      'GROUP BY name ORDER BY max_time DESC LIMIT 15'
+      'GROUP BY name ORDER BY max_time DESC LIMIT 5'
       )
     cursor.execute(sql)
     last_wikis = list(cursor)
@@ -53,8 +55,6 @@ with perm.env.db_transaction as db:
           href="${href.chrome('site/css/patch.css')}" />
     <link rel="stylesheet" type="text/css"
           href="${href.chrome('site/css/bootstrap-responsive.css')}" />
-    <link rel="stylesheet" type="text/css"
-          href="${href.chrome('site/css/lannocc.css')}" />
   </head>
 
   <py:match path="body" once="true" buffer="false">
@@ -84,7 +84,6 @@ with perm.env.db_transaction as db:
             <ul class="nav" py:if="chrome.nav['mainnav']">
               <li py:for="idx, item in enumerate(chrome.nav['mainnav'])"
                   class="${classes(first_last(idx, chrome.nav['mainnav']), active=item.active)}">${item.label}</li>
-              <li>something NEW</li>
             </ul>
 
             <form id="search" class="navbar-search pull-left" action="${href.search()}" method="get">
@@ -102,15 +101,25 @@ with perm.env.db_transaction as db:
     <div id="main" class="container-fluid">
       <div class="row-fluid">
         <div class="span${SIDEBAR_SPAN}">
+          <img id="aglogo" src="http://alphagriffin.com/usr/include/ag/favicon/favicon-196.png"/>
           <div class="well sidebar-nav">
             <ul class="nav nav-list">
+              <li class="nav-header">Web Services</li>
+              <li><a target="home" href="http://alphagriffin.com">Home</a></li>
+              <li><a target="zabbix" href="http://alphagriffin.com/zabbix">Monitoring</a></li>
+              <li><a target="doc" href="http://doc.alphagriffin.com">Documentation</a></li>
+              <li><a target="build" href="http://build.alphagriffin.com">Build Automation</a></li>
+              <li><a target="jupyterhub" href="http://jupyterhub.alphagriffin.com">JupyterHub</a></li>
+              <li><a target="live" href="http://live.alphagriffin.com">Live Video</a></li>
               <li class="nav-header">Actions</li>
               <li><a href="${href.newticket()}?type=task">Add task</a></li>
               <li><a href="${href.newticket()}?type=bug">Add bug</a></li>
               <li class="nav-header">Tickets</li>
+              <!--
               <li py:for="report in all_reports">
                 <a href="${href.report(report[0])}">${report[1]}</a>
               </li>
+              -->
               <li class="nav-header">Last modified pages</li>
               <li>
                 <a href="${href.wiki('TitleIndex')}">Title Index</a>
@@ -163,12 +172,10 @@ with perm.env.db_transaction as db:
     </div>
 
     <div id="footer" xml:lang="en"><hr/>
-      <a id="tracpowered" href="http://trac.edgewall.org/"><img
-        src="${chrome.htdocs_location}trac_logo_mini.png" height="30"
-        width="107" alt="Trac Powered" class="pull-left" /></a>
+      <a id="tracpowered" href="http://alphagriffin.com/"><img
+        src="/aGryphon.png" alt="Alpha Griffin" class="pull-left" /></a>
       <p class="pull-left" i18n:msg="version">
-        Powered by <a href="${href.about()}"><strong>Trac ${trac.version}</strong></a><br />
-        By <a href="http://www.edgewall.org/">Edgewall Software</a>.
+        Powered by <a href="${href.about()}"><strong>Trac ${trac.version}</strong></a>
       </p>
       <p class="pull-right">${chrome.footer}</p>
     </div>
