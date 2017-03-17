@@ -21,18 +21,18 @@ for element in chrome['ctxtnav']:
   new_ctxtnav.append(element)
 chrome['ctxtnav'] = new_ctxtnav
 
-db = perm.env.get_db_cnx()
-cursor = db.cursor()
-cursor.execute(
-  "SELECT id, title FROM report ORDER BY %s" % ('id'))
-all_reports = list(cursor)
+with perm.env.db_transaction as db:
+    cursor = db.cursor()
+    cursor.execute(
+      "SELECT id, title FROM report ORDER BY %s" % ('id'))
+    all_reports = list(cursor)
 
-sql = (
-  'SELECT name, max(time) AS max_time FROM wiki '
-  'GROUP BY name ORDER BY max_time DESC LIMIT 15'
-  )
-cursor.execute(sql)
-last_wikis = list(cursor)
+    sql = (
+      'SELECT name, max(time) AS max_time FROM wiki '
+      'GROUP BY name ORDER BY max_time DESC LIMIT 15'
+      )
+    cursor.execute(sql)
+    last_wikis = list(cursor)
 
 ?>
 <!DOCTYPE html
@@ -53,6 +53,8 @@ last_wikis = list(cursor)
           href="${href.chrome('site/css/patch.css')}" />
     <link rel="stylesheet" type="text/css"
           href="${href.chrome('site/css/bootstrap-responsive.css')}" />
+    <link rel="stylesheet" type="text/css"
+          href="${href.chrome('site/css/lannocc.css')}" />
   </head>
 
   <py:match path="body" once="true" buffer="false">
@@ -82,6 +84,7 @@ last_wikis = list(cursor)
             <ul class="nav" py:if="chrome.nav['mainnav']">
               <li py:for="idx, item in enumerate(chrome.nav['mainnav'])"
                   class="${classes(first_last(idx, chrome.nav['mainnav']), active=item.active)}">${item.label}</li>
+              <li>something NEW</li>
             </ul>
 
             <form id="search" class="navbar-search pull-left" action="${href.search()}" method="get">
